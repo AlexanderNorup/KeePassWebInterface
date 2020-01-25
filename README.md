@@ -1,2 +1,2 @@
-"# KeePassWebInterface" 
+# KeePassWebInterface
 TODO: Write documentation
