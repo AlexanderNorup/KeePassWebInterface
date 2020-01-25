@@ -1,0 +1,2 @@
+<?php
+$kdbxPath = "./Database.kdbx";

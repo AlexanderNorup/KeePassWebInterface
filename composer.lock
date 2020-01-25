@@ -1,0 +1,66 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "d287403c2623a496c3c937883fad066d",
+    "packages": [
+        {
+            "name": "keepassphp/keepassphp",
+            "version": "v1.1.0-RC2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/shkdee/KeePassPHP.git",
+                "reference": "ff9a00ad1d9f921afa6c831a72b10a0fb16dfc03"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/shkdee/KeePassPHP/zipball/ff9a00ad1d9f921afa6c831a72b10a0fb16dfc03",
+                "reference": "ff9a00ad1d9f921afa6c831a72b10a0fb16dfc03",
+                "shasum": ""
+            },
+            "require": {
+                "ext-hash": "*",
+                "php": ">=5.3.0"
+            },
+            "suggest": {
+                "ext-openssl": "A better and faster alternative to mcrypt"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "keepassphp/keepassphp.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Louis Traynard",
+                    "email": "louis.traynard@m4x.org",
+                    "homepage": "https://github.com/shkdee"
+                }
+            ],
+            "description": "KeePass password manager in PHP",
+            "homepage": "https://github.com/shkdee/KeePassPHP",
+            "keywords": [
+                "keepass",
+                "password manager"
+            ],
+            "time": "2018-09-27T22:38:01+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "keepassphp/keepassphp": 5
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}

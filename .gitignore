@@ -1,0 +1,7 @@
+.idea/
+vendor/
+keepassphp/
+*.kdbx
+*_index.json
+composer.phar
+composer.json

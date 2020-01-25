@@ -1,0 +1,30 @@
+.main {
+    margin-top: 1em;
+}
+
+.center {
+    text-align: center;
+}
+
+.nothing {
+    color:grey;
+}
+
+.entry-icon {
+    width: 2rem;
+    height: 2rem;
+    text-align: center;
+    display: block!important;
+    line-height: 2rem !important;
+    margin: 0 auto;
+}
+
+.entry-password-box {
+    height: 0;
+    visibility: hidden;
+}
+
+.entry-password-box.show{
+    height: initial;
+    visibility: visible;
+}

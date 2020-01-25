@@ -1,0 +1,26 @@
+<div class="modal fade" id="scanQRModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Scan QR</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div style="display: none;" id="noCameraError" class="alert alert-warning" role="alert">
+                    <strong>Error!</strong> You don't have any cameras
+                </div>
+                <div id="hasCamera">
+                    <video width="100%" id="video-preview"></video>
+                    <label for="selectCamera">Select your camera:</label><br>
+                    <select onchange="changeCamera();" id="selectCamera">
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
