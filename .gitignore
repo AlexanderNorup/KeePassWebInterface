@@ -5,3 +5,5 @@ keepassphp/
 *_index.json
 composer.phar
 composer.json
+test.php
+.htaccess

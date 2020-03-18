@@ -42,7 +42,7 @@ function getPassword(){
 
 
     $.post("api.php", {
-        action: "getPassword",
+        action: "getEntry",
         masterPassword: password,
         entryUUID: currentEntryUUID
     }, function(resp){
@@ -51,10 +51,23 @@ function getPassword(){
             $("#decryptingErrorValue").text(resp);
             $("#decryptingWaiting").hide();
         }else{
+
+            var entry = JSON.parse(resp);
             inputGroup.addClass("show");
             button.hide();
-            inputBox.val(resp);
+            inputBox.val(entry["Password"]);
             $("#decryptPasswordModal").modal('hide');
+
+            var keysToIgnore = [
+                "UserName",
+                "Password",
+                "Title"
+            ];
+            storedData[currentEntryUUID] = [];
+            for(var i in entry){
+                if(keysToIgnore.includes(i)) continue;
+                storedData[currentEntryUUID][i] = entry[i];
+            }
         }
     });
 }

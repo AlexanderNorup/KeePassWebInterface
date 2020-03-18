@@ -1,8 +1,20 @@
+String.prototype.replaceAll = function(target, replacement) {
+    return this.split(target).join(replacement);
+};
+function linkify(text) {
+    var urlRegex =/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+    return text.replace(urlRegex, function(url) {
+        return '<a target="_blank" href="' + url + '">' + url + '</a>';
+    });
+}
 
 var currentEntryUUID = "";
 var currentEntryElement;
 var QRScanner;
 var cameras = [];
+
+var storedData = [];
+
 function revealPassword(entryUUID, element){
     currentEntryUUID = entryUUID;
     currentEntryElement = element;
@@ -16,6 +28,36 @@ function revealPassword(entryUUID, element){
 
 }
 
+$(document).ready(function(){
+    //Add [EnterTrigger] attribute support.
+    $("[enterTriggers]").each(function(){
+        $(this).keypress(function(event){
+           if(event.code == "Enter"){
+               eval($(this).attr("enterTriggers")); //Runs JS in attribute
+           }
+        });
+    });
+});
+
+function triggerMoreInfo(entryUUID){
+    $("#moreInfoModal").modal();
+
+    $("#moreInfoTableBody").empty();
+    var toAppend = "";
+    if(storedData[entryUUID] != undefined) {
+        for (var i in storedData[entryUUID]) {
+            toAppend += "<tr>";
+            toAppend += "<td>" + i + "</td>";
+            toAppend += "<td class='wordBreak'>" + linkify(storedData[entryUUID][i].replaceAll("\n", "<br>") ) + "</td>";
+            toAppend += "</tr>";
+        }
+    }
+    $("#moreInfoTableBody").append(toAppend);
+}
+
+function triggerChangelog(){
+    $("#changelogModal").modal();
+}
 
 function ScanQR(input){
     $("#scanQRModal").modal();

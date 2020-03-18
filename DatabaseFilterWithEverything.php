@@ -3,7 +3,7 @@
 use \KeePassPHP\iFilter as iFilter;
 use \KeePassPHP\Entry as Entry;
 use \KeePassPHP\Group as Group;
-class DatabaseFilter implements iFilter
+class DatabaseFilterWithEverything implements iFilter
 {
     public function acceptEntry(Entry $entry)
     {
@@ -22,7 +22,7 @@ class DatabaseFilter implements iFilter
 
     public function acceptTags()
     {
-        return false;
+        return true;
     }
 
     public function acceptIcons()
@@ -32,7 +32,7 @@ class DatabaseFilter implements iFilter
 
     public function acceptPasswords()
     {
-        return false;
+        return true;
     }
 
     public function acceptStrings($key)

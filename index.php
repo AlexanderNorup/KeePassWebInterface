@@ -1,8 +1,11 @@
 <?php
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
 //BASE64 IMG VIEWER: <img src="data:image/png;base64,<STRING_HERE>" />
 require_once("KeePassWrapper.php");
 include("settings.php");
-//$kdbxPath = "./MainDatabase.kdbx";
+//$kdbxPath = "./Database.kdbx";
 $pass = "123";
 
 $db = new KeePassWrapper($kdbxPath);
@@ -55,6 +58,7 @@ function getIfSet($entry, $field, $inInput = false)
     <div class="jumbotron">
         <h1>Keepass Webinterface</h1>
         <h4>By Alexander Nørup</h4>
+        <h6>Version 1.1<sup> <a href="javascript:triggerChangelog();">Changelog</a></sup></h6>
         <?php if ($err = $db->getLastError()): ?>
             <div class="alert alert-danger" role="alert">
                 <strong>Error!</strong> <?php echo $err; ?>
@@ -97,7 +101,15 @@ function getIfSet($entry, $field, $inInput = false)
                                     <td>
                                         <button onclick="revealPassword('<?php echo $entry["UUID"]; ?>', this);" type="button" class="btn btn-light btn-block">Click to reveal</button>
                                         <div class="entry-password-box">
-                                            <?php echo getIfSet($entry, "PASSWORD", true); ?>
+                                            <?php //echo getIfSet($entry, "PASSWORD", true); ?>
+
+                                            <div class="input-group">
+                                                <input readonly="" id="<?php echo $entry["UUID"]; ?>-PASSWORD-id" type="text" class="form-control" placeholder="" aria-label="Field" aria-describedby="<?php echo $entry["UUID"]; ?>-PASSWORD-addon" value="">
+                                                <div class="input-group-append" id="<?php echo $entry["UUID"]; ?>-PASSWORD-addon">
+                                                    <button onclick="copyToClipboard('<?php echo $entry["UUID"]; ?>-PASSWORD-id');" class="btn btn-outline-secondary" type="button">COPY</button>
+                                                    <button onclick="triggerMoreInfo('<?php echo $entry["UUID"]; ?>');" class="btn btn-outline-secondary" type="button"><i class="fas fa-info-circle"></i></button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
@@ -114,7 +126,8 @@ function getIfSet($entry, $field, $inInput = false)
             <div class="input-group">
                 <input id="master-password-refresh-index" type="password" class="form-control"
                        placeholder="Master Password" aria-label="Master Password input"
-                       aria-describedby="button-refreshIndex-addon">
+                       aria-describedby="button-refreshIndex-addon"
+                       enterTriggers="refreshIndex();">
                 <div class="input-group-append" id="button-refreshIndex-addon">
                     <button onclick="refreshIndex();" class="btn btn-outline-secondary" type="button">Unlock</button>
                     <button onclick="ScanQR('master-password-refresh-index');" class="btn btn-outline-secondary" type="button"><i class="fas fa-qrcode"></i></button>
@@ -131,6 +144,8 @@ function getIfSet($entry, $field, $inInput = false)
 <?php include("InsertPasswordModal.html"); ?>
 <?php include("ScanQRModal.html"); ?>
 <?php include("RefreshIndexWaiter.html"); ?>
+<?php include("MoreInfoModal.html"); ?>
+<?php include("Changelog.html"); ?>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"

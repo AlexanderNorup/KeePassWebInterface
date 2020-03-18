@@ -1,7 +1,8 @@
 <?php
 
 require_once("vendor/autoload.php");
-require_once("DatabaseFilter.php");
+require_once("DatabaseFilterForIndex.php");
+require_once("DatabaseFilterWithEverything.php");
 use \KeePassPHP\KeePassPHP as KeePassPHP;
 
 class KeePassWrapper
@@ -32,6 +33,38 @@ class KeePassWrapper
         }
     }
 
+    public function getEntry($entryUUID){
+        if(!$this->decrypted){
+            $this->error = "Cannot get entry. Database is not unlocked.";
+            return false;
+        }
+        $filter = new DatabaseFilterWithEverything();
+        $database =$this->db->toArray($filter);
+
+        $path_ = $this->recursive_array_search($entryUUID, $database);
+
+        if(!$path_){
+            $this->error = "Entry does not exist in database!";
+            return false;
+        }
+
+        //Convert ["Group"][xx]["Group"][yy] to an array("Group", xx, "Group", yy).
+        $path = array();
+        foreach(explode('[', $path_) as $item){
+            $val = explode(']',$item)[0];
+            if(is_numeric($val)){
+                $path[] = intval($val);
+            }else {
+                $path[] = $val;
+            }
+        }
+
+        //Array filter removes all empty strings and null values
+        $path = array_filter($path,function($value) {return !is_null($value) && $value !== '';});
+
+        return $this->array_nested_value($database, $path)["StringFields"];
+
+    }
 
     public function getPasswordForEntry($entryUUID){
         if(!$this->decrypted){
@@ -57,7 +90,7 @@ class KeePassWrapper
             return false;
         }
         $index = array();
-        $filter = new DatabaseFilter();
+        $filter = new DatabaseFilterForIndex();
 
         $index["Groups"] = $this->db->getGroups()[0]->toArray($filter);
         $index["CustomIcons"] = $this->db->toArray($filter)["CustomIcons"];
@@ -104,6 +137,11 @@ class KeePassWrapper
         $ru = getrusage();
         $this->decryptionTime = $this->rutime($ru, $rustart, "utime");
         $this->decrypted = !$this->error;
+
+        if($this->decrypted){
+            $this->saveIndexToFile(); //Refreshed index;
+        }
+
         return !$this->error;
     }
 
@@ -132,4 +170,31 @@ class KeePassWrapper
             (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
             || $_SERVER['SERVER_PORT'] == 443;
     }
+
+
+    //Thanks Pieter De Schepper on Stackoverflow :)
+    private function recursive_array_search($needle, $haystack, $currentKey = '') {
+        foreach($haystack as $key=>$value) {
+            if (is_array($value)) {
+                $nextKey = $this->recursive_array_search($needle,$value, $currentKey . '[' . $key . ']');
+                if ($nextKey) {
+                    return $nextKey;
+                }
+            }
+            else if($value==$needle) {
+                return is_numeric($key) ? $currentKey . '[' .$key . ']' : $currentKey;
+            }
+        }
+        return false;
+    }
+
+    private function array_nested_value($array, $path) {
+        $temp = &$array;
+
+        foreach($path as $key) {
+            $temp =& $temp[$key];
+        }
+        return $temp;
+    }
+
 }

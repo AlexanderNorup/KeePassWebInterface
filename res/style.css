@@ -28,3 +28,7 @@
     height: initial;
     visibility: visible;
 }
+
+#moreInfoTableBody td.wordBreak {
+    word-break: break-word;
+}
