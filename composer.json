@@ -1,0 +1,5 @@
+{
+    "require": {
+        "keepassphp/keepassphp": "v1.1.0-RC2"
+    }
+}
